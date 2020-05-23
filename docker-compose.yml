@@ -18,8 +18,8 @@ services:
     ports:
       - 8080:8080
   php:
-    image: yiisoftware/yii2-php:7.1-apache
-    #    image: yiisoftware/yii2-php:7.2-fpm
+    image: yiisoftware/yii2-php:7.2-apache
+#    image: yiisoftware/yii2-php:7.2-fpm
     container_name: yii2_php
     volumes:
       - ~/.composer-docker/cache:/root/.composer/cache:delegated
