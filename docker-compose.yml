@@ -5,7 +5,7 @@ services:
     restart: always
     container_name: yii2_postgres
     environment:
-      POSTGRES_USER: root
+      POSTGRES_USER: 'root'
       POSTGRES_PASSWORD: 'password'
       POSTGRES_DB: 'db_yii2'
     volumes:
@@ -26,4 +26,3 @@ services:
       - ./:/app:delegated
     ports:
       - '8000:80'
-# psql "postgresql://root:password@postgres/db_yii2"

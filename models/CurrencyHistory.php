@@ -66,4 +66,15 @@ class CurrencyHistory extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Currency::className(), ['id' => 'currency_id']);
     }
+
+    public function fields()
+    {
+        // $fields = parent::fields();
+        return [
+            'nominal',
+            'value',
+            'created_at',
+        ];
+    }
+
 }

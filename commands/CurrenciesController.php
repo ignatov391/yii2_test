@@ -8,7 +8,6 @@ use yii\httpclient\XmlParser;
 use app\models\Currency;
 use app\models\CurrencyHistory;
 
-// yii currencies/index
 //from crontab
 //# m h  dom mon dow   command
 //*/10 * * * * /app/yii currencies/index
@@ -42,27 +41,27 @@ class CurrenciesController extends Controller
                     $model->lastValue = $curValue;
                     $model->updated_at = date("Y-m-d H:i:s");
                     $model->remoteID = $remoteID;
-                    $model->validate();
-//                    var_dump($model->getErrors());
+                    // $model->validate();
+                    // var_dump($model->getErrors());
                     $status = $model->save();
                     if ($model->id) {
+                        $currencyID  = $model->id;
                         $modelHistory = new CurrencyHistory();
                         $modelHistory->isNewRecord = true;
-                        $modelHistory->currency_id = $model->id;
+                        $modelHistory->currency_id = $currencyID;
                         $modelHistory->remoteID = $remoteID;
                         $modelHistory->nominal = $item['Nominal'];
                         $modelHistory->value = $curValue;
                         $modelHistory->created_at = date("Y-m-d H:i:s");
-                        $modelHistory->validate();
-//                        var_dump($modelHistory->getErrors());
+                        // $modelHistory->validate();
+                        // var_dump($modelHistory->getErrors());
                         $statusHistory = $modelHistory->save();
                     }
                     print_r([
                         'status save' => $status,
-                        'status history add' => $statusHistory ?? null,
-                        'ID' => $model->id,
+                        'status history save' => $statusHistory ?? null,
+                        'ID' => $currencyID ?? null,
                     ]);
-//                    return 0;
                 }
             }
             return ExitCode::OK;
