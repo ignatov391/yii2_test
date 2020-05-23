@@ -75,4 +75,25 @@ class Currency extends \yii\db\ActiveRecord
     {
         return $this->hasMany(CurrencyHistory::className(), ['currency_id' => 'id']);
     }
+
+    public function fields()
+    {
+        $fields = parent::fields();
+
+        // подмена имени
+        $fields['value'] = $fields['lastValue'];
+        // удаляем небезопасные поля
+        unset($fields['id'], $fields['created_at'], $fields['lastValue']);
+
+        return $fields;
+    }
+
+    /**
+     * @return array|string[]
+     */
+    public function extraFields()
+    {
+        /* TODO реализовать */
+        return ['currencyHistories'];
+    }
 }
