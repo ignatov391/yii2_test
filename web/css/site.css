@@ -113,3 +113,25 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+/* custom */
+.w-100 {
+    width: 100%;
+}
+
+.text-none {
+    display: block;
+    width: 100%;
+    height: 20px;
+}
+
+.currency_graphic {
+    width: 100%;
+    height: 500px;
+
+}
+@media(max-width:767px) {
+    .currency_graphic {
+        height: 50vh;
+    }
+}

@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use yii\filters\auth\HttpBearerAuth;
+use yii\filters\auth\QueryParamAuth;
 use app\models\Currency;
 use yii\rest\ActiveController;
 
@@ -16,7 +17,8 @@ class CurrenciesController extends ActiveController
         $behaviors = parent::behaviors();
         if (false) { // проверка заголовка на текущий сайт
             $behaviors['authenticator'] = [
-                'class' => HttpBearerAuth::className(),
+                'class' => QueryParamAuth::className(),
+//                'class' => HttpBearerAuth::className(),
             ];
         }
         return $behaviors;

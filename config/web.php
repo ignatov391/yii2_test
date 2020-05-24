@@ -5,6 +5,7 @@ $db = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic',
+    'name' => 'Yii2 test',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'aliases' => [
@@ -49,7 +50,7 @@ $config = [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'enableStrictParsing' => true,
+            // 'enableStrictParsing' => true, // строгий разбоу URL
             'rules' => [
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'currencies'],
                 'GET,HEAD currencies/<remoteID>' => 'currencies/view', // переопределение роута
