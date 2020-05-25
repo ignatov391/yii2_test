@@ -1,6 +1,9 @@
 <?php
 /* @var $this yii\web\View */
 
+$this->registerJsFile('//www.gstatic.com/charts/loader.js', ['depends' => 'yii\web\JqueryAsset']);
+$this->registerJsFile('/js/currency.js', ['depends' => 'yii\web\JqueryAsset']);
+
 $this->title = 'My Yii Application';
 ?>
 <div class="site-index">
@@ -17,25 +20,21 @@ $this->title = 'My Yii Application';
                 <div class="col-md-3">
                     <div class="form-group">
                         <label class="text-none"></label>
-                        <select class="form-control" name="currency_name">
-                            <option>выберите валюту</option>
-                            <option value="currency1">currency1</option>
-                            <option value="currency2">currency2</option>
-                            <option value="currency3">currency3</option>
-                            <option value="currency4">currency4</option>
+                        <select class="form-control js-currency_select" name="currency_name">
+                            <option value="">Все валюты</option>
                         </select>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="inputDate">Начальный период:</label>
-                        <input type="date" class="form-control">
+                        <input type="date" name="currency_date_begin" class="form-control js-currency_date_begin" min="<?=date('Y-m-d')?>" max="<?=date('Y-m-d')?>">
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="inputDate">Конечный период:</label>
-                        <input type="date" class="form-control">
+                        <input type="date" name="currency_date_end" class="form-control js-currency_date_end" min="<?=date('Y-m-d')?>" max="<?=date('Y-m-d')?>">
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -46,8 +45,6 @@ $this->title = 'My Yii Application';
         </form>
         <div class="row">
             <div class="col-lg-12">
-                <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
                 <div class="currency_graphic" id="chart_div"></div>
             </div>
         </div>
@@ -56,34 +53,5 @@ $this->title = 'My Yii Application';
 </div>
 
 <script type="text/javascript">
-  google.charts.load('current', {'packages':['corechart']});
-  google.charts.setOnLoadCallback(drawChart);
 
-  function drawChart() {
-    var data = google.visualization.arrayToDataTable([
-      ['Year', 'USD', 'EURO'],
-      ['2013',  1000,      400],
-      ['2014',  1170,      460],
-      ['2015',  660,       1120],
-      ['2016',  1030,      540]
-    ]);
-
-    var options = {
-      title: 'Company Performance',
-      //hAxis: {title: 'Year',  titleTextStyle: {color: '#333'}},
-      vAxis: {minValue: 0},
-
-      // Allow multiple
-      // simultaneous selections.
-      selectionMode: 'multiple',
-      // Trigger tooltips
-      // on selections.
-      tooltip: {trigger: 'selection'},
-      // Group selections
-      // by x-value.
-      aggregationTarget: 'category',
-    };
-    var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
-    chart.draw(data, options);
-  }
 </script>

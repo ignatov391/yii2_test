@@ -17,7 +17,7 @@ class m200523_113555_create_currency_history_table extends Migration
     {
         $this->createTable('{{%currency_history}}', [
             'id' => $this->primaryKey(),
-            'remoteID' => $this->string('32')->notNull(),// для контроля
+//            'remoteID' => $this->string('32')->notNull(),// для контроля
 //            'chainCode' => $this->string('8')->notNull(),
             'nominal' => $this->integer(),
             'value' => $this->float()->notNull(),

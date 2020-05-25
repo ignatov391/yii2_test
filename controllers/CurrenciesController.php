@@ -15,7 +15,7 @@ class CurrenciesController extends ActiveController
     public function behaviors()
     {
         $behaviors = parent::behaviors();
-        if (false) { // проверка заголовка на текущий сайт
+        if (true) { // исключение для текущего сайта
             $behaviors['authenticator'] = [
                 'class' => QueryParamAuth::className(),
 //                'class' => HttpBearerAuth::className(),
@@ -32,12 +32,61 @@ class CurrenciesController extends ActiveController
         unset($actions['delete'], $actions['create'], $actions['update']);
         unset($actions['view']); // убиваем для последующего переопределения
 
+        $actions['index']['prepareDataProvider'] = [$this, 'prepareDataProvider'];
+
         return $actions;
+    }
+
+    public function prepareDataProvider()
+    {
+        $data = Currency::find()
+            ->with(['currencyHistories' => function ($query)
+            {
+                // $created_at = '2020-05-23';
+                $request = \Yii::$app->request;
+                $dateMin = $request->get('date-min');
+                $dateMax = $request->get('date-max');
+                $dateTime = new \DateTime();
+                if ($dateMin) {
+                    $createdMin = $dateTime->setTimestamp(strtotime($dateMin))->format('Y-m-d H:i:s');
+                    $query->andWhere(['>', 'created_at', $createdMin]);
+                }
+                if ($dateMax) {
+                    $createdMax = $dateTime->setTimestamp(strtotime($dateMax))->format('Y-m-d H:i:s');
+                    $query->andWhere(['<', 'created_at', $createdMax]);
+                }
+            },
+            ])
+            ->all();
+
+        if ($data) {
+            return $data;
+        }
     }
 
     public function actionView($remoteID)
     {
-        $data = Currency::find()->where(['remoteID' => $remoteID])->one();
+        $data = Currency::find()
+            ->where(['currency.remoteID' => $remoteID])
+            ->with(['currencyHistories' => function ($query)
+                {
+                    // $created_at = '2020-05-23';
+                    $request = \Yii::$app->request;
+                    $dateMin = $request->get('date-min');
+                    $dateMax = $request->get('date-max');
+                    $dateTime = new \DateTime();
+                    if ($dateMin) {
+                        $createdMin = $dateTime->setTimestamp(strtotime($dateMin))->format('Y-m-d H:i:s');
+                        $query->andWhere(['>', 'created_at', $createdMin]);
+                    }
+                    if ($dateMax) {
+                        $createdMax = $dateTime->setTimestamp(strtotime($dateMax))->format('Y-m-d H:i:s');
+                        $query->andWhere(['<', 'created_at', $createdMax]);
+                    }
+                },
+            ])
+            ->one();
+
         if ($data) {
             return $data;
         }

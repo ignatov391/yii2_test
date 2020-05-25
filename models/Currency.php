@@ -83,8 +83,8 @@ class Currency extends \yii\db\ActiveRecord
         // подмена имени
         $fields['value'] = $fields['lastValue'];
         // удаляем небезопасные поля
-        unset($fields['id'], $fields['created_at'], $fields['lastValue']);
-
+        unset($fields['id'], $fields['lastValue']);
+//        $fields[] = 'currencyHistories';
         return $fields;
     }
 
@@ -93,7 +93,6 @@ class Currency extends \yii\db\ActiveRecord
      */
     public function extraFields()
     {
-        /* TODO реализовать */
         return ['currencyHistories'];
     }
 }
