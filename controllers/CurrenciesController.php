@@ -15,7 +15,9 @@ class CurrenciesController extends ActiveController
     public function behaviors()
     {
         $behaviors = parent::behaviors();
-        if (true) { // исключение для текущего сайта
+        $request = \Yii::$app->request;
+
+        if (empty($request->get($request->csrfParam))) { // исключение для текущего сайта
             $behaviors['authenticator'] = [
                 'class' => QueryParamAuth::className(),
 //                'class' => HttpBearerAuth::className(),
@@ -49,11 +51,11 @@ class CurrenciesController extends ActiveController
                 $dateTime = new \DateTime();
                 if ($dateMin) {
                     $createdMin = $dateTime->setTimestamp(strtotime($dateMin))->format('Y-m-d H:i:s');
-                    $query->andWhere(['>', 'created_at', $createdMin]);
+                    $query->andWhere(['>=', 'created_at', $createdMin]);
                 }
                 if ($dateMax) {
-                    $createdMax = $dateTime->setTimestamp(strtotime($dateMax))->format('Y-m-d H:i:s');
-                    $query->andWhere(['<', 'created_at', $createdMax]);
+                    $createdMax = $dateTime->setTimestamp(strtotime($dateMax)+86400)->format('Y-m-d H:i:s');
+                    $query->andWhere(['<=', 'created_at', $createdMax]);
                 }
             },
             ])
@@ -77,11 +79,11 @@ class CurrenciesController extends ActiveController
                     $dateTime = new \DateTime();
                     if ($dateMin) {
                         $createdMin = $dateTime->setTimestamp(strtotime($dateMin))->format('Y-m-d H:i:s');
-                        $query->andWhere(['>', 'created_at', $createdMin]);
+                        $query->andWhere(['>=', 'created_at', $createdMin]);
                     }
                     if ($dateMax) {
-                        $createdMax = $dateTime->setTimestamp(strtotime($dateMax))->format('Y-m-d H:i:s');
-                        $query->andWhere(['<', 'created_at', $createdMax]);
+                        $createdMax = $dateTime->setTimestamp(strtotime($dateMax)+86400)->format('Y-m-d H:i:s');
+                        $query->andWhere(['<=', 'created_at', $createdMax]);
                     }
                 },
             ])
