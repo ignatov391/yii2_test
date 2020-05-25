@@ -12,7 +12,7 @@ $(document).ready(function(){
         expand:'currencyHistories'
         },
         success: function(data) {
-            console.log(data);
+//            console.log(data);
             dateBegin = parseInt(new Date().getTime());
             dataChart = [];
             dataChart[0] = ['Date'];
@@ -25,49 +25,50 @@ $(document).ready(function(){
                 }
                 dataChart[0][i+1] = item.charCode;
                 $.each(item.currencyHistories, function(j, history) {
-                    timestamp = new Date(history.created_at.split(".").reverse().join(".")).getTime() / 1000;
-                    if (!dataChart[timestamp]) {
-                        dataChart[timestamp]  =[];
+                    /* todo Только для теста! */
+                    // timeKey = Math.trunc(new Date(history.created_at.split(".").reverse().join(".")).getTime() / 1);//10000);
+                    timeKey = Math.trunc(new Date(history.created_at.split(".").reverse().join(".")).getTime() / 1000000);
+                    if (!dataChart[timeKey]) {
+                        dataChart[timeKey]  =[];
+                        dataChart[timeKey][0] = history.created_at;
                     }
-                    dataChart[timestamp][0] = history.created_at;
-                    dataChart[timestamp][i+1] = history.value;
+                    dataChart[timeKey][i+1] = history.value;
                 });
             });
             dateBegin = formatFate(dateBegin);
             $('.js-currency_date_begin').attr('min', dateBegin);
             $('.js-currency_date_end').attr('min', dateBegin);
 
-            mapChars = Object.keys(dataChart);
+            mapChars = Object.keys(dataChart).sort();
+            mapChars = mapChars.sort();
             lengthChars = dataChart[0].length;
             dataChartTmp = [];
-            console.log(dataChart);
             if (lengthChars > 0) {
-                $.each(Object.keys(dataChart), function(index, item) {
-                    /* todo FIX ME! неверный перебор. */
+                for (index = 0; index < mapChars.length; ++index) {
+                    item = mapChars[index];
+                    dataChartTmp[index] = dataChart[item];
                     if (index > 0) {
                         for (i = 1; i < lengthChars; i++) {
-                            if (!dataChart[item][i]) {
-//                                if (i > 1) {
-//                                    for (j = i-1; j > 1 && dataChart[item][j]>0; --j) {
-//                                    }
-//                                    if (dataChart[item][j]) {
-//                                        dataChart[item][i] = dataChart[item][j];
-//                                        // console.log(j +' '+ i + ' ' + index);
-//                                    } else {
-//                                        console.log(j +' '+ i + ' ' + index);
-//                                        // dataChart[item][i] = 0;
-//                                    }
-//                                } else {
-                                    dataChart[item][i] = 0;
-//                                }
+                            if (!dataChartTmp[index][i]) {
+                                if (index > 1) {
+                                    for (k = index-1; k > 1 && dataChartTmp[k][i] <= 0; --k) {
+                                        // console.log(dataChartTmp[k][i]+'= dataChartTmp[index][k]'+k+' '+i);
+                                    }
+                                    if (dataChartTmp[k][i]) {
+                                        dataChartTmp[index][i] = dataChartTmp[k][i];
+                                    } else {
+                                         dataChartTmp[index][i] = 0;
+                                    }
+                                } else {
+                                    dataChartTmp[index][i] = 0;
+                                }
                             }
                         }
                     }
-                    dataChartTmp[index] = dataChart[item];
-                });
+                }
             }
             dataChart = dataChartTmp;
-            console.log(dataChart);
+//            console.log(dataChart);
             initGoogleCharts();
         }
     });
