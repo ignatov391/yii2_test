@@ -49,7 +49,7 @@ class CurrenciesController extends Controller
                         $modelHistory = new CurrencyHistory();
                         $modelHistory->isNewRecord = true;
                         $modelHistory->currency_id = $currencyID;
-                        $modelHistory->remoteID = $remoteID;
+                        //$modelHistory->remoteID = $remoteID;
                         $modelHistory->nominal = $item['Nominal'];
                         $modelHistory->value = $curValue;
                         $modelHistory->created_at = date("Y-m-d H:i:s");

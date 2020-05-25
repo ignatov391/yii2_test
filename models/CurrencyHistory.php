@@ -8,7 +8,6 @@ use Yii;
  * This is the model class for table "currency_history".
  *
  * @property int $id
- * @property string $remoteID
  * @property int|null $nominal
  * @property float $value
  * @property int $currency_id
@@ -32,12 +31,11 @@ class CurrencyHistory extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['remoteID', 'value', 'currency_id', 'created_at'], 'required'],
+            [['value', 'currency_id', 'created_at'], 'required'],
             [['nominal', 'currency_id'], 'default', 'value' => null],
             [['nominal', 'currency_id'], 'integer'],
             [['value'], 'number'],
             [['created_at'], 'safe'],
-            [['remoteID'], 'string', 'max' => 32],
             [['currency_id'], 'exist', 'skipOnError' => true, 'targetClass' => Currency::className(), 'targetAttribute' => ['currency_id' => 'id']],
         ];
     }
@@ -49,7 +47,6 @@ class CurrencyHistory extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'remoteID' => 'Remote ID',
             'nominal' => 'Nominal',
             'value' => 'Value',
             'currency_id' => 'Currency ID',
