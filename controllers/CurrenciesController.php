@@ -17,7 +17,7 @@ class CurrenciesController extends ActiveController
         $behaviors = parent::behaviors();
         $request = \Yii::$app->request;
 
-        if (empty($request->get($request->csrfParam))) { // исключение для текущего сайта
+        if (empty($request->get($request->csrfParam))) { // на методах GET csrf-token не работает. Реализовано в качестве временной меры.
             $behaviors['authenticator'] = [
                 'class' => QueryParamAuth::className(),
 //                'class' => HttpBearerAuth::className(),
